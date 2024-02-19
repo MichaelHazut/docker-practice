@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web1:
+    build: .
+    volumes:
+      - "./logs:/app/logs"
+  web2:
+    build: .
+    volumes:
+      - "./logs:/app/logs"
+  web3:
+    build: .
+    volumes:
+      - "./logs:/app/logs"
+  nginx:
+    image: "nginx:alpine"
+    ports:
+      - "80:80"
+    volumes:
+      - "./nginx.conf:/etc/nginx/nginx.conf"
+  db:
+    image: "postgres:alpine"
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+      - "dblogs:/var/log/postgresql"
+
+    environment:
+      POSTGRES_PASSWORD: example
+
+volumes:
+  dbdata:
+  dblogs:
