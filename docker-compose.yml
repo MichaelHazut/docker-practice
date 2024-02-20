@@ -1,17 +1,11 @@
 version: '3'
 services:
-  web1:
+  web:
     build: .
     volumes:
       - "./logs:/app/logs"
-  web2:
-    build: .
-    volumes:
-      - "./logs:/app/logs"
-  web3:
-    build: .
-    volumes:
-      - "./logs:/app/logs"
+    deploy:
+      replicas: 3
   nginx:
     image: "nginx:alpine"
     ports:
@@ -19,13 +13,16 @@ services:
     volumes:
       - "./nginx.conf:/etc/nginx/nginx.conf"
   db:
-    image: "postgres:alpine"
-    volumes:
-      - "dbdata:/var/lib/postgresql/data"
-      - "dblogs:/var/log/postgresql"
-
+    image: mysql:latest
+    container_name: mysql_container
     environment:
-      POSTGRES_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: counterdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - dblogs:/var/log/mysql
 
 volumes:
   dbdata:
